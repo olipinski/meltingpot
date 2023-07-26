@@ -1556,13 +1556,21 @@ def get_config():
       "variable": "votingMatrix",
   },
   # Observation for the wrapper to know when the voting/communication time is
-      {
+  {
       "name": "IN_VOTING_ROUND",
       "type": "tensor.Int32Tensor",
       "shape": (1,),
       "component": "Progress",
       "variable": "inVotingRound_tensor"
-  }]
+  },
+# Observation for the wrapper to know which players to mute
+  {
+      "name": "ACTIVE_PLAYERS",
+      "type": "tensor.Int32Tensor",
+      "shape": (MANDATED_NUM_PLAYERS,),
+      "component": "Progress",
+      "variable": "activePlayers_tensor"
+}]
 
 
   if _ENABLE_DEBUG_OBSERVATIONS:
@@ -1613,6 +1621,7 @@ def get_config():
   config.global_observation_names = [
       "WORLD.RGB",
       "WORLD.IN_VOTING_ROUND",
+      "WORLD.ACTIVE_PLAYERS",
   ]
 
   # The specs of the environment (from a single-agent perspective).
@@ -1625,6 +1634,7 @@ def get_config():
       # Debug only (do not use the following observations in policies).
       "WORLD.RGB": specs.rgb(176, 264),
       "WORLD.IN_VOTING_ROUND": specs.int32(1,),
+      "WORLD.ACTIVE_PLAYERS": specs.int32(MANDATED_NUM_PLAYERS, ),
   })
 
   # The roles assigned to each player.

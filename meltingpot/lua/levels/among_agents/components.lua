@@ -87,6 +87,7 @@ function Progress:__init__(kwargs)
   -- Variables to track information to expose as observations.
   self.progress_bar = tensor.DoubleTensor({0})
   self.inVotingRound_tensor = tensor.Int32Tensor({0})
+  self.activePlayers_tensor = tensor.Int32Tensor(self.numPlayers)
   self.identity_tensor = tensor.DoubleTensor(self.numPlayers)
   self.depositSquares = {}
 end
@@ -132,6 +133,19 @@ function Progress:start()
       end
     end
   end
+
+  -- update all the active players
+  for _, object in pairs(self.avatars) do
+    local roleComponent = object:getComponent("Role")
+    if roleComponent:checkActive() then
+      local avatarComponent = object:getComponent('Avatar')
+      self.activePlayers_tensor(avatarComponent:getIndex()):val(1)
+    else
+      local avatarComponent = object:getComponent('Avatar')
+      self.activePlayers_tensor(avatarComponent:getIndex()):val(0)
+    end
+  end
+
 end
 
 function Progress:getVotingRoundStatus()
@@ -246,6 +260,18 @@ end
 function Progress:update()
   -- Check whether the Crewmates have completed all the tasks.
   self:checkCrewmateTaskWin()
+
+  -- update all the active players
+  for _, object in pairs(self.avatars) do
+    local roleComponent = object:getComponent("Role")
+    if roleComponent:checkActive() then
+      local avatarComponent = object:getComponent('Avatar')
+      self.activePlayers_tensor(avatarComponent:getIndex()):val(1)
+    else
+      local avatarComponent = object:getComponent('Avatar')
+      self.activePlayers_tensor(avatarComponent:getIndex()):val(0)
+    end
+  end
 
   -- A small negative reward at each step to encourage efficiency.
   for _, object in pairs(self.avatars) do
