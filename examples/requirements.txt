@@ -3,7 +3,7 @@ dm_env
 dm_meltingpot
 dm_tree
 dmlab2d
-gym
+gymnasium
 matplotlib
 ml_collections
 numpy<1.23  # Needed by Ray because it uses `np.bool`.

@@ -13,7 +13,7 @@
 # limitations under the License.
 """Binary to run Stable Baselines 3 agents on meltingpot substrates."""
 
-import gym
+import gymnasium
 from meltingpot import substrate
 import stable_baselines3
 from stable_baselines3.common import callbacks
@@ -36,7 +36,7 @@ class CustomCNN(torch_layers.BaseFeaturesExtractor):
 
   def __init__(
       self,
-      observation_space: gym.spaces.Box,
+      observation_space: gymnasium.spaces.Box,
       features_dim=128,
       num_frames=6,
       fcnet_hiddens=(1024, 128),
@@ -44,7 +44,7 @@ class CustomCNN(torch_layers.BaseFeaturesExtractor):
     """Construct a custom CNN feature extractor.
 
     Args:
-      observation_space: the observation space as a gym.Space
+      observation_space: the observation space as a gymnasium.Space
       features_dim: Number of features extracted. This corresponds to the number
         of unit for the last layer.
       num_frames: The number of (consecutive) frames to feed into the network.

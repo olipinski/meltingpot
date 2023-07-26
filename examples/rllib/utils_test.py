@@ -14,7 +14,7 @@
 """Tests for utils.py."""
 
 from absl.testing import absltest
-from gym.spaces import discrete
+from gymnasium.spaces import discrete
 from meltingpot import substrate
 from meltingpot.configs.substrates import commons_harvest__open
 

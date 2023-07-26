@@ -21,7 +21,7 @@ from meltingpot.utils.policies import fixed_action_policy
 from meltingpot.utils.policies import policy
 from meltingpot.utils.policies import policy_factory
 from meltingpot.utils.policies import puppet_policy
-from meltingpot.utils.policies import saved_model_policy
+# from meltingpot.utils.policies import saved_model_policy
 from meltingpot.utils.substrates import specs
 
 NOOP_BOT_NAME = 'noop_bot'
