@@ -1141,7 +1141,6 @@ function AdditionalPlayerSprites:__init__(kwargs)
       -- Boolean flags that determine whether or not to rotate each sprite.
       {'customNoRotates', args.default({}), args.tableType},
   })
-  print("INIT ADD SPRITES")
   AdditionalPlayerSprites.Base.__init__(self, kwargs)
 end
 
