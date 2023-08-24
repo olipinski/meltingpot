@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Configuration for among_agents.
+"""Configuration for hidden_agenda.
 
 Example video: https://youtu.be/voJWckiOh5k
 
@@ -57,12 +57,11 @@ If neither of the above conditions are met before the episode ends, the game is
 considered a tie, and players get zero reward.
 """
 import copy
-import numpy as np
 from typing import Any, Mapping, Sequence
 
 from ml_collections import config_dict
-from meltingpot.python.utils.substrates import shapes
-from meltingpot.python.utils.substrates import specs
+from meltingpot.utils.substrates import shapes
+from meltingpot.utils.substrates import specs
 
 # Warning: setting `_ENABLE_DEBUG_OBSERVATIONS = True` may cause slowdown.
 _ENABLE_DEBUG_OBSERVATIONS = False
@@ -1229,8 +1228,7 @@ def get_gem_deposit_prefab(crewmate_pseudoreward: float):
 
 def create_player(player_idx: int, role: str, num_players: int,
                   pseudoreward_for_freezing: float,
-                  pseudoreward_for_being_frozen: float,
-                  colours: list):
+                  pseudoreward_for_being_frozen: float):
   """Create a prefab for a Player (Impostor or Crewmate).
 
   Args:
@@ -1285,8 +1283,8 @@ def create_player(player_idx: int, role: str, num_players: int,
                   "spriteShapes": [shapes.CUTE_AVATAR,
                                    shapes.CUTE_AVATAR_FROZEN],
                   "palettes": [
-                      shapes.get_palette(colours[player_idx]),
-                      shapes.get_palette(colours[player_idx])
+                      shapes.get_palette(HIDDEN_AGENDA_COLORS[player_idx]),
+                      shapes.get_palette(HIDDEN_AGENDA_COLORS[player_idx])
                   ],
                   "noRotates": [True]
               }
@@ -1302,7 +1300,7 @@ def create_player(player_idx: int, role: str, num_players: int,
                   "customSpriteShapes": [shapes.CUTE_AVATAR_W_BUBBLE] *
                                         num_players,
                   "customPalettes": [
-                      shapes.get_palette(colours[i])
+                      shapes.get_palette(HIDDEN_AGENDA_COLORS[i])
                       for i in range(num_players)
                   ],
                   "customNoRotates": [True]
@@ -1554,30 +1552,9 @@ def get_config():
       "shape": (MANDATED_NUM_PLAYERS, MANDATED_NUM_PLAYERS + 2),
       "component": "Progress",
       "variable": "votingMatrix",
-  },
-  # Observation for the wrapper to know when the voting/communication time is
-  {
-      "name": "IN_VOTING_ROUND",
-      "type": "tensor.Int32Tensor",
-      "shape": (1,),
-      "component": "Progress",
-      "variable": "inVotingRound_tensor"
-  },
-# Observation for the wrapper to know which players to mute
-  {
-      "name": "ACTIVE_PLAYERS",
-      "type": "tensor.Int32Tensor",
-      "shape": (MANDATED_NUM_PLAYERS,),
-      "component": "Progress",
-      "variable": "activePlayers_tensor"
-}]
-
+  }]
 
   if _ENABLE_DEBUG_OBSERVATIONS:
-    config.scene_prefab["components"].append({
-        "component": "LocationObserver",
-        "kwargs": {"objectIsAvatar": True, "alsoReportOrientation": True},
-    })
     metrics.append({
         "name": "GLOBAL_PROGRESS",
         "type": "tensor.DoubleTensor",
@@ -1592,6 +1569,13 @@ def get_config():
         "component": "Progress",
         "variable": "identity_tensor"
     })
+    metrics.append({
+        "name": "VOTING",
+        "type": "tensor.DoubleTensor",
+        "shape": (MANDATED_NUM_PLAYERS, MANDATED_NUM_PLAYERS + 2),
+        "component": "Progress",
+        "variable": "votingMatrix"
+    })
 
   # Add the global metrics reporter
   config.scene_prefab["components"].append({
@@ -1599,6 +1583,12 @@ def get_config():
       "kwargs": {
           "metrics": metrics
       }
+  })
+
+  # Add locations for rendering the FOV
+  config.scene_prefab["components"].append({
+      "component": "LocationObserver",
+      "kwargs": {"objectIsAvatar": True, "alsoReportOrientation": True},
   })
 
   # Action set configuration.
@@ -1613,8 +1603,6 @@ def get_config():
   ]
   config.global_observation_names = [
       "WORLD.RGB",
-      "WORLD.IN_VOTING_ROUND",
-      "WORLD.ACTIVE_PLAYERS",
   ]
 
   # The specs of the environment (from a single-agent perspective).
@@ -1626,8 +1614,6 @@ def get_config():
       "VOTING": specs.float64(MANDATED_NUM_PLAYERS, MANDATED_NUM_PLAYERS + 2),
       # Debug only (do not use the following observations in policies).
       "WORLD.RGB": specs.rgb(176, 264),
-      "WORLD.IN_VOTING_ROUND": specs.int32(1,),
-      "WORLD.ACTIVE_PLAYERS": specs.int32(MANDATED_NUM_PLAYERS, ),
   })
 
   # The roles assigned to each player.
@@ -1642,12 +1628,9 @@ def build(
     roles: Sequence[str],
     config: config_dict.ConfigDict,
 ) -> Mapping[str, Any]:
-  """Build the among_agents substrate given player preferences."""
+  """Build the hidden_agenda_fov substrate given player preferences."""
   # Build avatars.
   num_players = len(roles)
-  # Shuffle the palettes, otherwise impostor is always salmon pink...
-  rng = np.random.default_rng()
-  rng.shuffle(HIDDEN_AGENDA_COLORS)
   avatar_objects = []
   for player_idx, role in enumerate(roles):
     # Create an avatar with the correct role.
@@ -1658,10 +1641,9 @@ def build(
         pseudoreward_for_freezing=
         config.pseudorewards.pseudoreward_for_freezing,
         pseudoreward_for_being_frozen=
-        config.pseudorewards.pseudoreward_for_being_frozen,
-        colours=HIDDEN_AGENDA_COLORS))
+        config.pseudorewards.pseudoreward_for_being_frozen))
   substrate_definition = dict(
-      levelName="among_agents",
+      levelName="hidden_agenda",
       levelDirectory="meltingpot/lua/levels",
       maxEpisodeLengthFrames=3000,
       spriteSize=8,

@@ -71,6 +71,7 @@ SUBSTRATES: Set[str] = frozenset({
     # keep-sorted start
     'allelopathic_harvest__open',
     'among_agents',
+    'among_agents_fov',
     'bach_or_stravinsky_in_the_matrix__arena',
     'bach_or_stravinsky_in_the_matrix__repeated',
     'boat_race__eight_races',
@@ -99,6 +100,7 @@ SUBSTRATES: Set[str] = frozenset({
     'fruit_market__concentric_rivers',
     'gift_refinements',
     'hidden_agenda',
+    'hidden_agenda_fov',
     'paintball__capture_the_flag',
     'paintball__king_of_the_hill',
     'predator_prey__alley_hunt',

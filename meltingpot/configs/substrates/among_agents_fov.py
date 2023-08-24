@@ -1563,21 +1563,16 @@ def get_config():
       "component": "Progress",
       "variable": "inVotingRound_tensor"
   },
-# Observation for the wrapper to know which players to mute
+  # Observation for the wrapper to know which players to mute
   {
       "name": "ACTIVE_PLAYERS",
       "type": "tensor.Int32Tensor",
       "shape": (MANDATED_NUM_PLAYERS,),
       "component": "Progress",
       "variable": "activePlayers_tensor"
-}]
-
+  }]
 
   if _ENABLE_DEBUG_OBSERVATIONS:
-    config.scene_prefab["components"].append({
-        "component": "LocationObserver",
-        "kwargs": {"objectIsAvatar": True, "alsoReportOrientation": True},
-    })
     metrics.append({
         "name": "GLOBAL_PROGRESS",
         "type": "tensor.DoubleTensor",
@@ -1599,6 +1594,12 @@ def get_config():
       "kwargs": {
           "metrics": metrics
       }
+  })
+
+  # Add locations for rendering the FOV
+  config.scene_prefab["components"].append({
+      "component": "LocationObserver",
+      "kwargs": {"objectIsAvatar": True, "alsoReportOrientation": True},
   })
 
   # Action set configuration.
@@ -1642,7 +1643,7 @@ def build(
     roles: Sequence[str],
     config: config_dict.ConfigDict,
 ) -> Mapping[str, Any]:
-  """Build the among_agents substrate given player preferences."""
+  """Build the among_agents_fov substrate given player preferences."""
   # Build avatars.
   num_players = len(roles)
   # Shuffle the palettes, otherwise impostor is always salmon pink...
