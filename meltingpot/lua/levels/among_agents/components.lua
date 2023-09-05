@@ -134,7 +134,7 @@ function Progress:start()
     end
   end
 
-  -- update all the active players
+  -- Update all the active players
   for _, object in pairs(self.avatars) do
     local roleComponent = object:getComponent("Role")
     if roleComponent:checkActive() then
@@ -261,18 +261,6 @@ function Progress:update()
   -- Check whether the Crewmates have completed all the tasks.
   self:checkCrewmateTaskWin()
 
-  -- update all the active players
-  for _, object in pairs(self.avatars) do
-    local roleComponent = object:getComponent("Role")
-    if roleComponent:checkActive() then
-      local avatarComponent = object:getComponent('Avatar')
-      self.activePlayers_tensor(avatarComponent:getIndex()):val(1)
-    else
-      local avatarComponent = object:getComponent('Avatar')
-      self.activePlayers_tensor(avatarComponent:getIndex()):val(0)
-    end
-  end
-
   -- A small negative reward at each step to encourage efficiency.
   for _, object in pairs(self.avatars) do
     local avatarComponent = object:getComponent('Avatar')
@@ -321,6 +309,18 @@ function Progress:update()
   end
   -- Update the step counter.
   self.stepCounter = self.stepCounter + 1
+
+  -- Update all the active players
+  for _, object in pairs(self.avatars) do
+    local roleComponent = object:getComponent("Role")
+    if roleComponent:checkActive() then
+      local avatarComponent = object:getComponent('Avatar')
+      self.activePlayers_tensor(avatarComponent:getIndex()):val(1)
+    else
+      local avatarComponent = object:getComponent('Avatar')
+      self.activePlayers_tensor(avatarComponent:getIndex()):val(0)
+    end
+  end
 end
 
 function Progress:getStepCounter()
