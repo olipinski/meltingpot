@@ -23,14 +23,13 @@ from meltingpot.utils.puppeteers import testutils
 
 
 class FixedGoalTest(parameterized.TestCase):
+    def test_goal_sequence(self):
+        puppeteer = fixed_goal.FixedGoal(mock.sentinel.goal)
+        observations = [{}] * 3
+        expected = [mock.sentinel.goal] * 3
+        actual, _ = testutils.goals_from_observations(puppeteer, observations)
+        self.assertSequenceEqual(actual, expected)
 
-  def test_goal_sequence(self):
-    puppeteer = fixed_goal.FixedGoal(mock.sentinel.goal)
-    observations = [{}] * 3
-    expected = [mock.sentinel.goal] * 3
-    actual, _ = testutils.goals_from_observations(puppeteer, observations)
-    self.assertSequenceEqual(actual, expected)
 
-
-if __name__ == '__main__':
-  absltest.main()
+if __name__ == "__main__":
+    absltest.main()
