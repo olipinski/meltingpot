@@ -1379,11 +1379,10 @@ def create_player(player_idx: int, role: str, num_players: int,
           },
       ]
   }
-  if _ENABLE_DEBUG_OBSERVATIONS:
-    player["components"].append({
+  player["components"].append({
         "component": "LocationObserver",
         "kwargs": {"objectIsAvatar": True, "alsoReportOrientation": True},
-    })
+  })
 
   return player
 
@@ -1594,12 +1593,6 @@ def get_config():
       "kwargs": {
           "metrics": metrics
       }
-  })
-
-  # Add locations for rendering the FOV
-  config.scene_prefab["components"].append({
-      "component": "LocationObserver",
-      "kwargs": {"objectIsAvatar": True, "alsoReportOrientation": True},
   })
 
   # Action set configuration.

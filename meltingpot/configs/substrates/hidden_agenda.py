@@ -1554,10 +1554,6 @@ def get_config():
       "variable": "votingMatrix",
   }]
   if _ENABLE_DEBUG_OBSERVATIONS:
-    config.scene_prefab["components"].append({
-        "component": "LocationObserver",
-        "kwargs": {"objectIsAvatar": True, "alsoReportOrientation": True},
-    })
     metrics.append({
         "name": "GLOBAL_PROGRESS",
         "type": "tensor.DoubleTensor",
