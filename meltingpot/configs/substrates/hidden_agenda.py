@@ -1680,15 +1680,6 @@ def get_config():
                 "variable": "identity_tensor",
             }
         )
-        metrics.append(
-            {
-                "name": "VOTING",
-                "type": "tensor.DoubleTensor",
-                "shape": (MANDATED_NUM_PLAYERS, MANDATED_NUM_PLAYERS + 2),
-                "component": "Progress",
-                "variable": "votingMatrix",
-            }
-        )
 
     # Add the global metrics reporter
     config.scene_prefab["components"].append(

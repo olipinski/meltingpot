@@ -1680,15 +1680,6 @@ def get_config():
                 "variable": "identity_tensor",
             }
         )
-        metrics.append(
-            {
-                "name": "VOTING",
-                "type": "tensor.DoubleTensor",
-                "shape": (MANDATED_NUM_PLAYERS, MANDATED_NUM_PLAYERS + 2),
-                "component": "Progress",
-                "variable": "votingMatrix",
-            }
-        )
 
     # Add the global metrics reporter
     config.scene_prefab["components"].append(
@@ -1704,9 +1695,12 @@ def get_config():
         "INVENTORY",
         "READY_TO_SHOOT",
         "VOTING",
+        "POSITION",
+        "ORIENTATION",
     ]
     config.global_observation_names = [
         "WORLD.RGB",
+        "WORLD.GLOBAL_PROGRESS",
     ]
 
     # The specs of the environment (from a single-agent perspective).
@@ -1719,6 +1713,10 @@ def get_config():
             "VOTING": specs.float64(MANDATED_NUM_PLAYERS, MANDATED_NUM_PLAYERS + 2),
             # Debug only (do not use the following observations in policies).
             "WORLD.RGB": specs.rgb(176, 264),
+            # Observations for rendering
+            "POSITION": specs.OBSERVATION["POSITION"],
+            "ORIENTATION": specs.OBSERVATION["ORIENTATION"],
+            "WORLD.GLOBAL_PROGRESS": specs.float64(1),
         }
     )
 

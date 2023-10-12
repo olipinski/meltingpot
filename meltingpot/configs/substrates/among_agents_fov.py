@@ -1712,11 +1712,14 @@ def get_config():
         "INVENTORY",
         "READY_TO_SHOOT",
         "VOTING",
+        "POSITION",
+        "ORIENTATION",
     ]
     config.global_observation_names = [
         "WORLD.RGB",
         "WORLD.IN_VOTING_ROUND",
         "WORLD.ACTIVE_PLAYERS",
+        "WORLD.GLOBAL_PROGRESS",
     ]
 
     # The specs of the environment (from a single-agent perspective).
@@ -1735,6 +1738,10 @@ def get_config():
             "WORLD.ACTIVE_PLAYERS": specs.int32(
                 MANDATED_NUM_PLAYERS,
             ),
+            # Observations for rendering
+            "POSITION": specs.OBSERVATION["POSITION"],
+            "ORIENTATION": specs.OBSERVATION["ORIENTATION"],
+            "WORLD.GLOBAL_PROGRESS": specs.float64(1),
         }
     )
 
