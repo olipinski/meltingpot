@@ -64,7 +64,7 @@ from meltingpot.utils.substrates import shapes
 from meltingpot.utils.substrates import specs
 
 # Warning: setting `_ENABLE_DEBUG_OBSERVATIONS = True` may cause slowdown.
-_ENABLE_DEBUG_OBSERVATIONS = True
+_ENABLE_DEBUG_OBSERVATIONS = False
 
 # This substrate only makes sense with exactly five players.
 MANDATED_NUM_PLAYERS = 5
@@ -1700,7 +1700,6 @@ def get_config():
     ]
     config.global_observation_names = [
         "WORLD.RGB",
-        "WORLD.GLOBAL_PROGRESS",
     ]
 
     # The specs of the environment (from a single-agent perspective).
@@ -1716,7 +1715,6 @@ def get_config():
             # Observations for rendering
             "POSITION": specs.OBSERVATION["POSITION"],
             "ORIENTATION": specs.OBSERVATION["ORIENTATION"],
-            "WORLD.GLOBAL_PROGRESS": specs.float64(1),
         }
     )
 

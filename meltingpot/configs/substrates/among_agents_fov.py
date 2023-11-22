@@ -1719,7 +1719,6 @@ def get_config():
         "WORLD.RGB",
         "WORLD.IN_VOTING_ROUND",
         "WORLD.ACTIVE_PLAYERS",
-        "WORLD.GLOBAL_PROGRESS",
     ]
 
     # The specs of the environment (from a single-agent perspective).
